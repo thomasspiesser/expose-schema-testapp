@@ -13,7 +13,12 @@ Package.describe({
 Package.onUse(function(api) {
   api.versionsFrom('1.2.0.2');
   api.use('ecmascript');
+  api.use('mongo');
+  api.use('underscore');
+  api.use('dburles:mongo-collection-instances@0.3.4');
   api.addFiles('expose-schema.js');
+
+  api.export('Exposee', "client");
 });
 
 Package.onTest(function(api) {
