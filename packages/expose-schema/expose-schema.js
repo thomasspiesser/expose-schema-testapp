@@ -60,6 +60,16 @@ Meteor.startup(function () {
         var mymain = {};
         var relations = {};
 
+        var encode_val = function(val) {
+            if (val.regEx instanceof RegExp) {
+                val.regexp = val.regEx.toString();
+            }
+
+            val.keyType = val.type.name;
+
+            return val;
+        }
+
         _.map(simpleSchema._schema, function (val, key) {
             if (/\./.test(key)) {
                 var parts = key.split('.');
@@ -74,12 +84,10 @@ Meteor.startup(function () {
                     sub_key = '_dollar';
                 }
 
-                relations[related_key][sub_key] = val;
-                relations[related_key][sub_key].keyType = val.type.name;
+                relations[related_key][sub_key] = encode_val(val);
             }
             else {
-                mymain[key] = val;
-                mymain[key].keyType = val.type.name;
+                mymain[key] = encode_val(val);;
 
                 /*
                  if (typeof mymain[key]['autoValue'] != 'undefined') {
@@ -98,6 +106,7 @@ Meteor.startup(function () {
             relations: relations
         };
 
+        console.log(doc);
         AaasSchemas.insert(doc);
     })
 
